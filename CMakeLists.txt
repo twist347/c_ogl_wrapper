@@ -17,6 +17,10 @@ endif ()
 
 add_library(coglw STATIC
         src/window.c
+        src/glad_wrapper.c
+        src/shader.c
+        src/vertex_buffer.c
+        src/vertex_array.c
 )
 
 target_include_directories(coglw PUBLIC

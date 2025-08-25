@@ -12,6 +12,8 @@ GLFWwindow *window_get_handle(const window_t *window);
 
 int window_should_close(const window_t *window);
 
+void window_process_input(const window_t *window);
+
 void window_swap_buffers(window_t *window);
 
 void window_poll_events(void);

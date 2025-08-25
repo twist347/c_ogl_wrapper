@@ -33,6 +33,7 @@ window_t *window_create(int width, int height, const char *title) {
 
     glfwMakeContextCurrent(handle);
     glfwSwapInterval(1); // VSync
+    glfwSetFramebufferSizeCallback(handle, framebuffer_size_callback);
 
     window_t *window = malloc(sizeof(window_t));
     if (!window) {
@@ -67,6 +68,12 @@ GLFWwindow *window_get_handle(const window_t *window) {
 
 int window_should_close(const window_t *window) {
     return glfwWindowShouldClose(window->handle);
+}
+
+void window_process_input(const window_t *window) {
+    if (glfwGetKey(window_get_handle(window), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window_get_handle(window), GLFW_TRUE);
+    }
 }
 
 void window_swap_buffers(window_t *window) {
