@@ -21,6 +21,7 @@ add_library(coglw STATIC
         src/shader.c
         src/vertex_buffer.c
         src/vertex_array.c
+        src/gl_info.c
 )
 
 target_include_directories(coglw PUBLIC

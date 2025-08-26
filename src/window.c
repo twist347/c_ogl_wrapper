@@ -8,17 +8,18 @@ struct window_t {
 };
 
 static void framebuffer_size_callback(GLFWwindow *handle, int width, int height) {
+    (void) handle;
     glViewport(0, 0, width, height);
 }
 
-window_t *window_create(int width, int height, const char *title) {
+window_t *window_create(int width, int height, const char *title, int major_ver, int minor_ver) {
     if (!glfwInit()) {
-        fprintf(stderr, "[ERROR] failed to initialize GLFW\n");
+        fprintf(stderr, "[ERROR::WINDOW] failed to initialize GLFW\n");
         return NULL;
     }
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, major_ver);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minor_ver);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -26,18 +27,23 @@ window_t *window_create(int width, int height, const char *title) {
 
     GLFWwindow *handle = glfwCreateWindow(width, height, title, NULL, NULL);
     if (!handle) {
-        fprintf(stderr, "[ERROR] failed to create GLFW window\n");
+        fprintf(stderr, "[ERROR::WINDOW] failed to create GLFW window\n");
         glfwTerminate();
         return NULL;
     }
 
     glfwMakeContextCurrent(handle);
+
     glfwSwapInterval(1); // VSync
+
+    int fbw = 0, fbh = 0;
+    glfwGetFramebufferSize(handle, &fbw, &fbh);
+    glViewport(0, 0, fbw, fbh);
     glfwSetFramebufferSizeCallback(handle, framebuffer_size_callback);
 
     window_t *window = malloc(sizeof(window_t));
     if (!window) {
-        fprintf(stderr, "[ERROR] Failed to allocate memory for window\n");
+        fprintf(stderr, "[ERROR::WINDOW] failed to allocate memory for window\n");
         glfwDestroyWindow(handle);
         glfwTerminate();
         return NULL;
@@ -67,10 +73,16 @@ GLFWwindow *window_get_handle(const window_t *window) {
 }
 
 int window_should_close(const window_t *window) {
+    if (!window || !window->handle) {
+        return 1;
+    }
     return glfwWindowShouldClose(window->handle);
 }
 
 void window_process_input(const window_t *window) {
+    if (!window || !window->handle) {
+        return;
+    }
     if (glfwGetKey(window_get_handle(window), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window_get_handle(window), GLFW_TRUE);
     }

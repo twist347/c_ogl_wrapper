@@ -29,7 +29,7 @@ int main() {
     vertex_buffer_t *vbo = NULL;
     vertex_array_t *vao = NULL;
 
-    window = window_create(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE);
+    window = window_create(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE, 4, 6);
     if (!window) {
         exit_code = EXIT_FAILURE;
         goto cleanup;
@@ -39,6 +39,8 @@ int main() {
         exit_code = EXIT_FAILURE;
         goto cleanup;
     }
+
+    info_print();
 
     const GLfloat vertices[] = {
         -0.5f, -0.5f, 0.0f, // left

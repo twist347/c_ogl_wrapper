@@ -4,7 +4,7 @@
 
 typedef struct window_t window_t;
 
-window_t *window_create(int width, int height, const char *title);
+window_t *window_create(int width, int height, const char *title, int major_ver, int minor_ver);
 
 void window_destroy(window_t *window);
 
