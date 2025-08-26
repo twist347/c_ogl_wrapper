@@ -17,9 +17,9 @@ const char *vertex_src =
 
 const char *fragment_src =
         "#version 330 core\n"
-        "out vec4 FragColor;\n"
+        "out vec4 frag_color;\n"
         "void main() {\n"
-        "    FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n"
+        "    frag_color1 = vec4(1.0, 0.0, 0.0, 1.0);\n"
         "}\n";
 
 int main() {
@@ -60,7 +60,7 @@ int main() {
         goto cleanup;
     }
 
-    vertex_array_add_buffer(vao, vbo, 0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *) 0);
+    vertex_array_add_buffer(vao, vbo, 0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void *) 0);
 
     shader = shader_create(vertex_src, fragment_src);
     if (!shader) {

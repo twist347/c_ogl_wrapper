@@ -121,7 +121,7 @@ void shader_set_int(shader_t *shader, const char *name, GLint value) {
         return;
     }
     const GLint loc = glGetUniformLocation(shader->id, name);
-    if (loc > 0) {
+    if (loc >= 0) {
         shader_set_int_loc(shader, loc, value);
     }
 }
@@ -133,7 +133,7 @@ void shader_set_int_loc(shader_t *shader, GLint loc, GLint value) {
 #ifdef GL_VERSION_4_1
     glProgramUniform1i(shader->id, loc, value);
 #else
-    ensure_bound(shader);
+    ensure_bounds(shader);
     glUniform1i(loc, value);
 #endif
 }
@@ -143,7 +143,7 @@ void shader_set_vec4(const shader_t *shader, const char *name, GLfloat x, GLfloa
         return;
     }
     const GLint loc = glGetUniformLocation(shader->id, name);
-    if (loc > 0) {
+    if (loc >= 0) {
         shader_set_vec4_loс(shader, loc, x, y, z, w);
     }
 }
@@ -155,7 +155,7 @@ void shader_set_vec4_loс(const shader_t *shader, GLint loc, GLfloat x, GLfloat 
 #ifdef GL_VERSION_4_1
     glProgramUniform4f(shader->id, loc, x, y, z, w);
 #else
-    ensure_bound(shader);
+    ensure_bounds(shader);
     glUniform4f(loc, x, y, z, w);
 #endif
 }
@@ -175,6 +175,7 @@ static GLboolean check_compile_errors(GLuint shader, const char *type) {
         glGetShaderInfoLog(shader, len, NULL, log);
         fprintf(stderr, "[ERROR::SHADER] %s compilation failed:\n%s\n", type, log);
         free(log);
+        return GL_FALSE;
     }
 
     return GL_TRUE;
@@ -195,6 +196,7 @@ static GLboolean check_link_errors(GLuint program) {
         glGetProgramInfoLog(program, len, NULL, log);
         fprintf(stderr, "[ERROR::SHADER] program linking failed:\n%s\n", log);
         free(log);
+        return GL_FALSE;
     }
 
     return GL_TRUE;
